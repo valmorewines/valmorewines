@@ -1445,7 +1445,9 @@
       justify-content: flex-start;
       gap: 0;
       width: auto;
-      padding: 10px;
+      max-height: calc(100vh - 115px);
+      overflow-y: auto;
+      padding: 8px 12px 12px;
       background: rgba(6,20,14,0.98);
       border: 1px solid rgba(201,168,76,0.18);
       border-radius: 6px;
@@ -1463,9 +1465,11 @@
     .nav-links li { width: 100%; }
     .nav-links a {
       display: flex;
+      align-items: center;
       justify-content: space-between;
       width: 100%;
-      padding: 14px 12px;
+      min-height: 44px;
+      padding: 10px 12px;
       font-size: 10px;
     }
     .nav-dropdown::after { display: none; }
@@ -1473,7 +1477,7 @@
       position: static;
       min-width: 100%;
       margin: 0 0 8px;
-      padding: 0 0 0 12px;
+      padding: 0 0 0 10px;
       opacity: 1;
       pointer-events: auto;
       transform: none;
@@ -1484,7 +1488,24 @@
     }
     .nav-dropdown:hover .nav-dropdown-menu,
     .nav-dropdown:focus-within .nav-dropdown-menu {
+      display: none;
+    }
+    .nav-dropdown.submenu-open .nav-dropdown-menu {
       display: block;
+    }
+    .nav-dropdown-menu a {
+      min-height: 44px;
+      padding: 11px 12px 11px 20px;
+      font-size: 10px;
+      color: rgba(245,240,232,0.84);
+      background-size: 0 0;
+      border-left: 1px solid rgba(201,168,76,0.28);
+      letter-spacing: 1.7px;
+    }
+    .nav-dropdown-menu a:hover,
+    .nav-dropdown-menu a:focus {
+      color: var(--dorado);
+      background: rgba(201,168,76,0.08);
     }
     footer { padding: 48px 32px 30px; }
     .footer-inner {
@@ -1498,10 +1519,29 @@
   }
 
   @media (max-width: 520px) {
-    .hero { padding-top: 198px; }
+    .hero { padding-top: 132px; }
     .deco-circle { display: none; }
-    #nav { padding: 14px; }
+    #nav {
+      left: 10px;
+      right: 10px;
+      top: 10px;
+      padding: 12px 12px 12px 14px;
+    }
     .nav-logo { font-size: 20px; letter-spacing: 4px; }
+    .nav-toggle {
+      width: 38px;
+      height: 38px;
+    }
+    .nav-links {
+      top: calc(100% + 6px);
+      padding: 8px 10px 10px;
+      max-height: calc(100vh - 96px);
+    }
+    .nav-links a {
+      min-height: 40px;
+      padding: 8px 10px;
+      letter-spacing: 1.8px;
+    }
     .hero-left, .hero-right { width: 100%; max-width: 100%; }
     .hero-left { padding: 18px 24px 42px; }
     .hero-right { padding: 8px 24px 18px; min-height: auto; }
@@ -1931,6 +1971,9 @@
   const nav = document.getElementById('nav');
   const navToggle = document.querySelector('.nav-toggle');
   const navLinks = document.querySelectorAll('.nav-links a');
+  document.querySelectorAll('.nav-dropdown-trigger').forEach((trigger) => {
+    trigger.setAttribute('aria-expanded', 'false');
+  });
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 60);
   });
@@ -1940,11 +1983,37 @@
       const isOpen = nav.classList.toggle('menu-open');
       navToggle.setAttribute('aria-expanded', String(isOpen));
       navToggle.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
+      if (!isOpen) {
+        document.querySelectorAll('.nav-dropdown.submenu-open').forEach((item) => {
+          item.classList.remove('submenu-open');
+        });
+      }
     });
 
     navLinks.forEach((link) => {
-      link.addEventListener('click', () => {
+      link.addEventListener('click', (event) => {
+        const isMobileMenu = window.matchMedia('(max-width: 900px)').matches;
+        const dropdown = link.closest('.nav-dropdown');
+        const isDropdownTrigger = link.classList.contains('nav-dropdown-trigger');
+
+        if (isMobileMenu && dropdown && isDropdownTrigger) {
+          event.preventDefault();
+          event.stopPropagation();
+          const shouldOpen = !dropdown.classList.contains('submenu-open');
+          document.querySelectorAll('.nav-dropdown.submenu-open').forEach((item) => {
+            if (item !== dropdown) item.classList.remove('submenu-open');
+          });
+          dropdown.classList.toggle('submenu-open', shouldOpen);
+          link.setAttribute('aria-expanded', String(shouldOpen));
+          return;
+        }
+
         nav.classList.remove('menu-open');
+        document.querySelectorAll('.nav-dropdown.submenu-open').forEach((item) => {
+          item.classList.remove('submenu-open');
+          const trigger = item.querySelector('.nav-dropdown-trigger');
+          if (trigger) trigger.setAttribute('aria-expanded', 'false');
+        });
         navToggle.setAttribute('aria-expanded', 'false');
         navToggle.setAttribute('aria-label', 'Abrir menú');
       });
