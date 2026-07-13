@@ -1476,41 +1476,30 @@
     .nav-dropdown-menu {
       position: static;
       min-width: 100%;
-      max-height: 0;
-      margin: 0;
+      max-height: none;
+      margin: 0 0 8px;
       padding: 0 0 0 10px;
-      opacity: 0;
-      visibility: hidden;
-      overflow: hidden;
+      opacity: 1;
+      visibility: visible;
+      overflow: visible;
       pointer-events: auto;
       transform: none;
       display: block;
       border: 0;
       box-shadow: none;
       background: transparent;
-      transition: max-height 0.22s ease, opacity 0.18s ease, visibility 0.18s ease, margin 0.18s ease;
-    }
-    .nav-dropdown:hover .nav-dropdown-menu,
-    .nav-dropdown:focus-within .nav-dropdown-menu {
-      max-height: 0;
-      margin: 0;
-      opacity: 0;
-      visibility: hidden;
-    }
-    .nav-dropdown.submenu-open .nav-dropdown-menu {
-      max-height: 190px;
-      margin: 0 0 6px;
-      opacity: 1;
-      visibility: visible;
+      transition: none;
     }
     .nav-dropdown-menu a {
       min-height: 44px;
       padding: 11px 12px 11px 20px;
       font-size: 10px;
-      color: rgba(245,240,232,0.84);
+      color: rgba(245,240,232,0.94) !important;
       background-size: 0 0;
       border-left: 1px solid rgba(201,168,76,0.28);
       letter-spacing: 1.7px;
+      opacity: 1 !important;
+      visibility: visible !important;
     }
     .nav-dropdown-menu a:hover,
     .nav-dropdown-menu a:focus {
@@ -2009,12 +1998,6 @@
         if (isMobileMenu && dropdown && isDropdownTrigger) {
           event.preventDefault();
           event.stopPropagation();
-          const shouldOpen = !dropdown.classList.contains('submenu-open');
-          document.querySelectorAll('.nav-dropdown.submenu-open').forEach((item) => {
-            if (item !== dropdown) item.classList.remove('submenu-open');
-          });
-          dropdown.classList.toggle('submenu-open', shouldOpen);
-          link.setAttribute('aria-expanded', String(shouldOpen));
           return;
         }
 
