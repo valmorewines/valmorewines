@@ -1490,6 +1490,17 @@
       background: transparent;
       transition: none;
     }
+    .nav-dropdown:hover .nav-dropdown-menu,
+    .nav-dropdown:focus-within .nav-dropdown-menu,
+    .nav-dropdown.submenu-open .nav-dropdown-menu {
+      display: block;
+      max-height: none;
+      margin: 0 0 8px;
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: none;
+    }
     .nav-dropdown-menu a {
       min-height: 44px;
       padding: 11px 12px 11px 20px;
