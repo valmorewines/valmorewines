@@ -1380,9 +1380,9 @@
     .hero-left::before { display: none; }
     .botella-wrapper,
     .botella-img,
-    .hero-carousel .botella-img { width: 154px; height: 230px; }
+    .hero-carousel .botella-img { width: clamp(190px, 44vw, 250px); height: clamp(285px, 66vw, 375px); }
     .hero-carousel {
-      min-height: 390px;
+      min-height: 460px;
       width: 100%;
     }
     .vino-slide {
@@ -1395,10 +1395,10 @@
     }
     .weather-widget {
       right: 12px;
-      top: 16px;
-      width: 132px;
-      min-height: 96px;
-      padding: 13px;
+      top: 14px;
+      width: 118px;
+      min-height: 86px;
+      padding: 11px;
     }
     .weather-temp { font-size: 24px; }
     .weather-icon { width: 28px; height: 28px; }
@@ -1557,9 +1557,9 @@
     .hero-right { padding: 8px 24px 18px; min-height: auto; }
     .botella-wrapper,
     .botella-img,
-    .hero-carousel .botella-img { width: 144px; height: 215px; }
+    .hero-carousel .botella-img { width: min(52vw, 215px); height: min(78vw, 322px); }
     .hero-carousel {
-      min-height: 340px;
+      min-height: 430px;
     }
     .marca { font-size: clamp(32px, 8.4vw, 39px); letter-spacing: 2.5px; }
     .origine { letter-spacing: 6px; margin-bottom: 24px; }
